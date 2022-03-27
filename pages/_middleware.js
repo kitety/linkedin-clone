@@ -11,6 +11,7 @@ export async function middleware(req) {
     // You could also check for any property on the session object,
     // like role === "admin" or name === "John Doe", etc.
     if (!session) {
+      console.log("session: ", session);
       const url = req.nextUrl.clone();
       url.pathname = "/home";
       return NextResponse.redirect(url);

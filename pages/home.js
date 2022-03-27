@@ -12,6 +12,7 @@ import { getProviders, signIn } from "next-auth/react";
 
 const Home = ({ providers }) => {
   console.log("p: ", providers);
+  providers=providers||{}
   return (
     <div className="space-y-10 relative">
       <Head>

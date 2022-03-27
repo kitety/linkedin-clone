@@ -1,14 +1,15 @@
-import { signOut } from "next-auth/react";
 import Head from "next/head";
-import Image from "next/image";
+import Header from "../components/header";
 
-export default function Home() {
+export default function Index() {
+  console.log("index");
   return (
-    <div>
+    <div className="bg-gray-900">
       <Head>
         <title>LinkedIn</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Header />
     </div>
   );
 }
