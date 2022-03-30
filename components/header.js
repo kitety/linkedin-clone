@@ -28,7 +28,7 @@ const spring = {
 const Header = () => {
   const [mounted, setMounted] = useState(false);
   const { setTheme, resolvedTheme, theme } = useTheme();
-  console.log("theme: ", theme);
+  console.log("theme: ", theme, resolvedTheme);
 
   useEffect(() => {
     setMounted(true);
