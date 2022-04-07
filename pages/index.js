@@ -2,6 +2,7 @@ import Head from "next/head";
 import Header from "../components/header";
 import React from "react";
 import Sidebar from "../components/sidebar";
+import Feed from "../components/feed";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
@@ -30,6 +31,7 @@ export default function Index() {
           {/* sidebar */}
           <Sidebar />
           {/* feed */}
+          <Feed />
         </div>
         {/* widgets */}
       </main>
