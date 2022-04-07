@@ -2,9 +2,22 @@ import Head from "next/head";
 import Header from "../components/header";
 import React from "react";
 import Sidebar from "../components/sidebar";
+import { getSession, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function Index() {
-  console.log("index");
+  const router = useRouter();
+  // client need
+  const { status } = useSession({
+    required: true,
+    onUnauthenticated: () => {
+      router.push("/home");
+    },
+  });
+
+  if (status === "loading") {
+    return "Loading or not authenticated...";
+  }
   return (
     <div className="bg-[#f3f2ef] dark:bg-black dark:text-white h-screen overflow-y-scroll md:space-y-6">
       <Head>
@@ -22,4 +35,21 @@ export default function Index() {
       </main>
     </div>
   );
+}
+// server need
+export async function getServerSideProps(context) {
+  // check is the user is logged in
+  const session = await getSession(context);
+  console.log("session: ", session);
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/home",
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 }
