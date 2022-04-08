@@ -5,8 +5,14 @@ import Sidebar from "../components/sidebar";
 import Feed from "../components/feed";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import Modal from "../components/modal";
+import { AnimatePresence } from "framer-motion";
+import { modalState, modalTypeState } from "../atoms/modalAtoms";
+import { useRecoilState } from "recoil";
 
 export default function Index() {
+  const [modalOpen, setModalOpen] = useRecoilState(modalState);
+  const [modalType, setModalType] = useRecoilState(modalTypeState);
   const router = useRouter();
   // client need
   const { status } = useSession({
@@ -34,6 +40,11 @@ export default function Index() {
           <Feed />
         </div>
         {/* widgets */}
+        <AnimatePresence>
+          {modalOpen && (
+            <Modal handleClose={() => setModalOpen(false)} type={modalType} />
+          )}
+        </AnimatePresence>
       </main>
     </div>
   );
