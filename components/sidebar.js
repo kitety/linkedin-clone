@@ -12,7 +12,7 @@ const Sidebar = () => {
   return (
     <div className="space-y-2 min-w-max max-w-lg">
       {/* top */}
-      <div className="bg-white dark:bg-[#1d2226] rounded-lg overflow-hidden relative flex flex-col items-center text-center border border-gray-300 dark:border-none">
+      <div className="bg-white dark:bg-[#1d2226] rounded-lg overflow-hidden relative flex flex-col items-center text-center border border-gray-300 dark:border-transparent">
         <div className="relative w-full h-14">
           <Image src={img} layout="fill" priority alt="bg" />
         </div>
@@ -53,7 +53,7 @@ const Sidebar = () => {
         </div>
       </div>
       {/* bottom */}
-      <div className="hidden md:flex bg-white dark:bg-[#1D2226] text-black/70 dark:text-white/75 rounded-lg overflow-hidden flex-col space-y-2 pt-2.5 sticky top-20 border border-gray-300 dark:border-none">
+      <div className="hidden md:flex bg-white dark:bg-[#1D2226] text-black/70 dark:text-white/75 rounded-lg overflow-hidden flex-col space-y-2 pt-2.5 sticky top-20 border border-gray-300 dark:border-transparent">
         <p className="sidebarLink">Groups</p>
         <div className="flex items-center justify-between">
           <p className="sidebarLink">Events</p>
