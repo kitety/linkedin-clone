@@ -10,7 +10,7 @@ const Widgets = ({ articles }) => {
   return (
     <div className="hidden xl:inline space-y-2">
       {/* news */}
-      <div className="bg-white dark:bg-[#1d2226] px-2.5 rounded-lg space-y-2 w-11/12 overflow-hidden border border-gray-300 dark:border-transparent">
+      <div className="bg-white dark:bg-[#1d2226] py-2.5 px-2.5 rounded-lg space-y-2 w-11/12 overflow-hidden border border-gray-300 dark:border-transparent">
         <div className="flex items-center justify-between font-bold px-2.5">
           <h4>LinkedIn News</h4>
           <InfoRounded className="h-5 w-5" />
