@@ -4,18 +4,42 @@ import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import { modalState, modalTypeState } from "../atoms/modalAtoms";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
-import { getPostState } from "../atoms/postAtoms";
-import { CommentOutlined } from "@mui/icons-material";
+import { getPostState, handlePostState } from "../atoms/postAtoms";
+import {
+  CommentOutlined,
+  DeleteRounded,
+  ReplyRounded,
+} from "@mui/icons-material";
+import ThumbUpOffAltOutlinedIcon from "@mui/icons-material/ThumbUpOffAltOutlined";
+import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
+import { useSession } from "next-auth/react";
+import TimeAgo from "timeago-react";
 
 const truncate = (string, n) =>
   string?.length > n ? string.substr(0, n - 1) + "...see more" : string;
 
 const Post = ({ post, modalPost }) => {
+  const { data: session } = useSession();
+  console.log("session: ", session);
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
   const [showAllText, setShowAllText] = useState(false);
   const [modalType, setModalType] = useRecoilState(modalTypeState);
   const [postState, setPostState] = useRecoilState(getPostState);
   const [liked, setLiked] = useState(false);
+  const [handlePost, setHandlePost] = useRecoilState(handlePostState);
+
+  const deletePost = async () => {
+    // 正在删除
+    if (handlePost) return;
+    await fetch(`/api/posts/${post._id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    setHandlePost(true);
+    setModalOpen(false);
+  };
   return (
     <div
       className={`bg-white dark:bg-[#1d2226] ${
@@ -30,6 +54,10 @@ const Post = ({ post, modalPost }) => {
           </h6>
           <p className="text-sm dark:text-white/75 opacity-80">{post.email}</p>
           {/* time ago stamp */}
+          <TimeAgo
+            datetime={post.createdAt}
+            className="text-xs dark:text-white/75 opacity-80"
+          />
         </div>
         {modalPost ? (
           <IconButton onClick={() => setModalOpen(false)}>
@@ -66,16 +94,38 @@ const Post = ({ post, modalPost }) => {
           }}
         />
       )}
-      <div>
+      <div className="flex items-center justify-evenly border-transparent border-t dark:border-gray-600/80 mx-2.5 pt-2 text-black/60 dark:text-white/75">
         {modalPost ? (
           <button className="postButton">
             <CommentOutlined />
             <h4>Comment</h4>
           </button>
         ) : (
-          <button className="postButton">
-            <Like />
-            <h4>Comment</h4>
+          <button
+            className={`postButton ${liked && "text-blue-500"}`}
+            onClick={() => setLiked(!liked)}
+          >
+            {liked ? (
+              <ThumbUpOffAltRoundedIcon className="-scale-x-100" />
+            ) : (
+              <ThumbUpOffAltOutlinedIcon className="-scale-x-100" />
+            )}
+
+            <h4>Like</h4>
+          </button>
+        )}
+        {session?.user?.email === post.email ? (
+          <button
+            className="postButton focus:text-red-400"
+            onClick={deletePost}
+          >
+            <DeleteRounded />
+            <h4>Delete post</h4>
+          </button>
+        ) : (
+          <button className="postButton ">
+            <ReplyRounded className="-scale-x-100" />
+            <h4>Share</h4>
           </button>
         )}
       </div>
