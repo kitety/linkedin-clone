@@ -10,9 +10,9 @@ import { AnimatePresence } from "framer-motion";
 import { modalState, modalTypeState } from "../atoms/modalAtoms";
 import { useRecoilState } from "recoil";
 import { connectToDatabase } from "../util/mongodb";
+import Widgets from "../components/widgets";
 
-export default function Index({ posts }) {
-  console.log("posts: ", posts);
+export default function Index({ posts, articles }) {
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
   const [modalType, setModalType] = useRecoilState(modalTypeState);
   const router = useRouter();
@@ -42,6 +42,7 @@ export default function Index({ posts }) {
           <Feed posts={posts} />
         </div>
         {/* widgets */}
+        <Widgets articles={articles} />
         <AnimatePresence>
           {modalOpen && (
             <Modal handleClose={() => setModalOpen(false)} type={modalType} />
@@ -55,7 +56,7 @@ export default function Index({ posts }) {
 export async function getServerSideProps(context) {
   // check is the user is not authenticated
   const session = await getSession(context);
-  console.log("session: ", session);
+
   if (!session) {
     return {
       redirect: {
@@ -72,9 +73,13 @@ export async function getServerSideProps(context) {
     .find()
     .sort({ timestamp: -1 })
     .toArray();
+  const results = await fetch(
+    `https://jsonplaceholder.typicode.com/todos`
+  ).then((res) => res.json());
 
   return {
     props: {
+      articles: results.slice(0, 5),
       posts: posts.map((post) => ({
         _id: post._id.toString(),
         input: post.input,
